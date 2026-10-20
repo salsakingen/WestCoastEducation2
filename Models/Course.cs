@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using WestCoastEducation2.InterFaces;
 
+
 namespace WestCoastEducation2.Models;
 
 public abstract class Course : IDisplayable
