@@ -1,57 +1,42 @@
-using System;
 using WestCoastEducation2.Models;
-namespace WestCoastEducation2.Services;
 
-public class CourseManager
+namespace WestCoastEducation2.Services
 {
-    private readonly List<Course> _courses = new();
-    public IReadOnlyList<Course> Courses => _courses.AsReadOnly();
-
-    public bool AddCourse(Course course)
+    public class CourseManager
     {
-        if (string.IsNullOrWhiteSpace(course.CourseNumber) ||
-        string.IsNullOrWhiteSpace(course.Title))
+        private readonly List<Course> _courses = new List<Course>();
+
+        public bool AddCourse(Course course)
         {
-            return false;
-        }
-        if (course.StartDate > course.EndDate ||
-        course.DurationDays <= 0)
-        {
-            return false;
-        }
-        foreach (Course exstingCourse in _courses)
-        {
-            if (exstingCourse.CourseNumber == course.CourseNumber)
+            foreach (Course existingCourse in _courses)
             {
-                return false;
+                if (existingCourse.CourseNumber == course.CourseNumber)
+                {
+                    return false;
+                }
+            }
+
+            _courses.Add(course);
+            return true;
+        }
+
+        public void ListCourses()
+        {
+            if (_courses.Count == 0)
+            {
+                Console.WriteLine("Det finns inga kurser.");
+                return;
+            }
+
+            foreach (Course course in _courses)
+            {
+                Console.WriteLine(course.GetInfo());
             }
         }
 
-        _courses.Add(course);
-        return true;
-    }
-    public void ListCourses()
-    {
-        if (_courses.Count == 0)
+        public IReadOnlyList<Course> Courses
         {
-            Console.WriteLine("Det finns inga kurser.");
-            return;
+            get { return _courses.AsReadOnly(); }
         }
-        foreach (Course course in _courses)
-        {
-            Console.WriteLine(course.GetInfo());
-        }
-    }
-    public bool RemoveCourse(string courseNumber)
-    {
-        Course? course = _courses.FirstOrDefault(c => c.CourseNumber == courseNumber);
-
-        if (course == null)
-        {
-            return false;
-        }
-        
-        _courses.Remove(course);
-        return true;
     }
 }
