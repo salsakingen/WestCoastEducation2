@@ -1,78 +1,43 @@
-using System;
 using WestCoastEducation2.Models;
+
 namespace WestCoastEducation2.Services;
 
 public class PersonManager
 {
-    private readonly List<Student> _student = [];
-    private readonly List<Teacher> _teacher = [];
+    private readonly List<Student> _students = [];
+    private readonly List<Teacher> _teachers = [];
     private readonly List<EducationLeader> _leaders = [];
-    private readonly List<Admin> _admin = [];
+    private readonly List<Admin> _admins = [];
 
-    public bool AddStudent(Student student)
+    // En gemensam kontroll för alla persontyper, så att den inte upprepas.
+    private static bool AddUnique<T>(List<T> list, T person) where T : Person
     {
-        foreach (Student existingStudent in _student)
+        foreach (T existing in list)
         {
-            if (existingStudent.PersonalNumber == student.PersonalNumber)
+            if (existing.PersonalNumber == person.PersonalNumber)
             {
                 return false;
             }
         }
 
-        _student.Add(student);
+        list.Add(person);
         return true;
     }
 
-    public bool AddTeacher(Teacher teacher)
+    public bool AddStudent(Student student) => AddUnique(_students, student);
+    public bool AddTeacher(Teacher teacher) => AddUnique(_teachers, teacher);
+    public bool AddEducationLeader(EducationLeader leader) => AddUnique(_leaders, leader);
+    public bool AddAdmin(Admin admin) => AddUnique(_admins, admin);
+
+    public void ListStudents()
     {
-        foreach (Teacher existingTeacher in _teacher)
+        if (_students.Count == 0)
         {
-            if (existingTeacher.PersonalNumber == teacher.PersonalNumber)
-            {
-                return false;
-            }
-        }
-
-        _teacher.Add(teacher);
-        return true;
-    }
-
-    public bool AddEducationLeader(EducationLeader leader)
-    {
-        foreach (EducationLeader existingLeader in _leaders)
-        {
-            if (existingLeader.PersonalNumber == leader.PersonalNumber)
-            {
-                return false;
-            }
-        }
-
-        _leaders.Add(leader);
-        return true;
-    }
-
-    public bool AddAdmin(Admin admin)
-    {
-        foreach (Admin existingAdmin in _admin)
-        {
-            if (existingAdmin.PersonalNumber == admin.PersonalNumber)
-            {
-                return false;
-            }
-        }
-
-        _admin.Add(admin);
-        return true;
-    }
-
-public void ListStudents()
-    {
-        if (_student.Count == 0)
-        {
-            Console.WriteLine("There is no Students");
+            Console.WriteLine("There are no students.");
             return;
         }
-        foreach (Student student in _student)
+
+        foreach (Student student in _students)
         {
             Console.WriteLine(student.GetInfo());
         }

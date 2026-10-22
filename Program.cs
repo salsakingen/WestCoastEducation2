@@ -1,132 +1,45 @@
-﻿using System;
-using WestCoastEducation2.Models;
+﻿using WestCoastEducation2.Models;
 using WestCoastEducation2.Services;
 
-Console.WriteLine("=== WestCoast Education Test ===\n");
+CourseManager courseManager = new();
+PersonManager personManager = new();
 
-// Create managers
-CourseManager courseManager = new CourseManager();
-PersonManager personManager = new PersonManager();
+ClassroomCourse history = new("1", "History", 14,
+    new DateTime(2026, 9, 1), new DateTime(2026, 9, 14), "A101");
 
-// 1. Test adding a classroom course
-Console.WriteLine("--- Test 1: Add Course ---");
+    DistanceCourse math = new("2", "Math", 14,
+    new DateTime(2026, 10, 1), new DateTime(2026, 10, 14), "https://example.com/meet");
 
-Course course1 = new ClassroomCourse(
-    "C001",
-    "C# Programming",
-    5,
-    new DateTime(2026, 11, 2),
-    new DateTime(2026, 11, 6),
-    "Room 101"
-);
-
-if (courseManager.AddCourse(course1))
-{
-    Console.WriteLine("PASS: Course added successfully.");
-}
-else
-{
-    Console.WriteLine("FAIL: Could not add course.");
-}
-
-// 2. Test adding a duplicate course
-Console.WriteLine("\n--- Test 2: Prevent Duplicate Course ---");
-
-Course duplicateCourse = new ClassroomCourse(
-    "C001",
-    "Another C# Course",
-    3,
-    new DateTime(2026, 12, 1),
-    new DateTime(2026, 12, 3),
-    "Room 102"
-);
-
-if (!courseManager.AddCourse(duplicateCourse))
-{
-    Console.WriteLine("PASS: Duplicate course rejected.");
-}
-else
-{
-    Console.WriteLine("FAIL: Duplicate course was added.");
-}
-
-// 3. Test adding a student
-Console.WriteLine("\n--- Test 3: Add Student ---");
-
-Student student1 = new Student(
-    "Anna",
-    "Andersson",
-    "0701234567",
-    "TEST-STUDENT-001",
-    "Main Street 1",
-    "41101",
-    "Gothenburg"
-);
-
-if (personManager.AddStudent(student1))
-{
-    Console.WriteLine("PASS: Student added successfully.");
-}
-else
-{
-    Console.WriteLine("FAIL: Could not add student.");
-}
-
-// Connect student to course
-student1.AddCourse(course1);
-
-Console.WriteLine("Student connected to course.");
-
-// 4. Test preventing duplicate students
-Console.WriteLine("\n--- Test 4: Prevent Duplicate Student ---");
-
-Student duplicateStudent = new Student(
-    "Anna",
-    "Andersson",
-    "0701234567",
-    "TEST-STUDENT-001",
-    "Main Street 1",
-    "41101",
-    "Gothenburg"
-);
-
-if (!personManager.AddStudent(duplicateStudent))
-{
-    Console.WriteLine("PASS: Duplicate student rejected.");
-}
-else
-{
-    Console.WriteLine("FAIL: Duplicate student was added.");
-}
-
-// 5. Test adding a teacher
-Console.WriteLine("\n--- Test 5: Add Teacher ---");
-
-Teacher teacher1 = new Teacher(
-    "Erik",
-    "Johansson",
-    "0707654321",
-    "TEST-TEACHER-001",
-    "Teacher Street 2",
-    "41102",
-    "Gothenburg",
-    "C# and .NET"
-);
-
-teacher1.AddCourse(course1);
-
-Console.WriteLine("Teacher created and connected to course.");
-Console.WriteLine(teacher1.GetInfo());
-
-// 6. Test listing courses
-Console.WriteLine("\n--- Test 6: List Courses ---");
-
+Console.WriteLine(courseManager.AddCourse(history)); // True
+Console.WriteLine(courseManager.AddCourse(history)); // False, dubblett
+courseManager.AddCourse(math);
 courseManager.ListCourses();
 
-// 7. Test listing students
-Console.WriteLine("\n--- Test 7: List Students ---");
-
+Student student = new("Findus", "Person", "031575819", "199001011234",
+    "Långtorget 12", "45256", "Gothenburg");
+Console.WriteLine(personManager.AddStudent(student)); // True
+Console.WriteLine(personManager.AddStudent(student)); // False, dubblett
+student.AddCourse(history);
+student.AddCourse(history); // "Course already exists!"
 personManager.ListStudents();
 
+Teacher teacher = new("Neo", "Andersson", "031576890", "198001021234",
+    "Linneagatan 4", "45351", "Gothenburg", "History");
+Console.WriteLine(teacher.GetInfo()); // visar "none"
+teacher.AddCourse(history);
+Console.WriteLine(teacher.GetInfo()); // visar kursen
 
-Console.WriteLine("\n=== Tests Finished ===");
+Console.WriteLine(personManager.AddTeacher(teacher));  // True
+Console.WriteLine(personManager.AddTeacher(teacher));  // False, dubblett
+
+EducationLeader leader = new("Pelle", "Svanslös", "031578090", "198805062012",
+    "Backagatan 3", "43560", "Gothenburg", "Management",
+    new DateTime(2012, 10, 2));
+Console.WriteLine(personManager.AddEducationLeader(leader)); // True
+Console.WriteLine(leader.GetInfo());
+
+Admin admin = new("Gustav", "Svensson", "031570980", "197901035060",
+    "Dahlströmsgatan 3", "43154", "Gothenburg", "Administration",
+    new DateTime(2010, 11, 3));
+Console.WriteLine(personManager.AddAdmin(admin)); // True
+Console.WriteLine(admin.GetInfo());

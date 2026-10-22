@@ -1,7 +1,4 @@
-using System;
-using System.Runtime.InteropServices;
 using WestCoastEducation2.InterFaces;
-
 
 namespace WestCoastEducation2.Models;
 
@@ -30,7 +27,8 @@ public abstract class Course : IDisplayable
 
     public virtual string GetInfo()
     {
-        return $"{CourseNumber}: {Title}, {DurationDays} days, {StartDate: 2012-08-10} - {EndDate: 2012-08-30}";
+        return $"{CourseNumber}: {Title}, {DurationDays} days, {StartDate:yyyy-MM-dd} - {EndDate:yyyy-MM-dd}";
     }
+
     public override string ToString() => GetInfo();
 }

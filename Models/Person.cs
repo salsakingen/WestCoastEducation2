@@ -32,9 +32,27 @@ protected Person (
         PostalCode=postalCode;
         City=city;
     }
+
+    //Gemensam metod för student och teacher så att kontrollen mot dubbletter bara skriv på ett ställe. Retunerar true om kursen lades till. 
+    protected static bool AddCourseTo(List<Course> courses, Course coruse)
+    {
+        foreach (Course existingCourse in courses)
+        {
+            if (existingCourse.CourseNumber == coruse.CourseNumber)
+            {
+                Console.WriteLine("Course already exsist!");
+                return false;
+            }
+        }
+        //tillägget sker efter loopen. en lista får inte ändras medan man går igenom 
+        courses.Add(coruse);
+        Console.WriteLine("course added successfully");
+        return true;
+    }
+
     public virtual string GetInfo()
     {
-        return $"{FirstName} {LastName} PhonNumber: {Phone} Address: {Address} {PostalCode} {City} ";
+        return $"{FirstName} {LastName} Phone: {Phone} Address: {Address} {PostalCode} {City} ";
 
     }
     public override string ToString() => GetInfo();

@@ -19,6 +19,6 @@ public class DistanceCourse : Course
     }
     public override string GetInfo()
     {
-        return base.GetInfo() + ", Distance";
+        return base.GetInfo() + $", Distance, Link: {MeetingLink}";
     }
 }

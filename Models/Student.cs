@@ -4,6 +4,8 @@ namespace WestCoastEducation2.Models;
 
 public class Student : Person
 {
+    // Aggregation: en student har kurser, men kurserna finns kvar
+    // som egna objekt även om studenten tas bort.
     public List<Course> Courses { get; } = [];
 
     public Student(
@@ -17,22 +19,11 @@ public class Student : Person
     )
     : base(firstName, lastName, phone, personalNumber, address, postalCode, city)
     {
-
     }
-    public void AddCourse(Course course)
+
+    public bool AddCourse(Course course)
     {
-        foreach (Course existingCourse in Courses)
-        {
-            if (existingCourse.CourseNumber == course.CourseNumber)
-            {
-                Console.WriteLine("Course already exists!");
-            }
-            else
-            {
-                Courses.Add(course);
-                Console.WriteLine("Course added successfully");
-            }
-        }
+        return AddCourseTo(Courses, course);
     }
 
     public override string GetInfo()

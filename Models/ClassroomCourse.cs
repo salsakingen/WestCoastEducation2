@@ -19,6 +19,6 @@ public class ClassroomCourse : Course
     }
     public override string GetInfo()
     {
-        return base.GetInfo() + $"Classroom {Classroom}";
+        return base.GetInfo() + $", Classroom: {Classroom}";
     }
 }

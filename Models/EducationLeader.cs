@@ -24,6 +24,6 @@ public class EducationLeader : Teacher
     }
     public override string GetInfo()
     {
-        return base.GetInfo() + $"Employed: {EmploymentDate:2010-10-10}";
+        return base.GetInfo() + $", Employed: {EmploymentDate:yyyy-mm-dd}";
     }
 }

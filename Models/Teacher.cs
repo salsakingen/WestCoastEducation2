@@ -1,10 +1,14 @@
 using System;
+using System.Security.Cryptography;
 
 namespace WestCoastEducation2.Models;
 
 public class Teacher : Person
 {
     public string KnowledgeArea { get; set; }
+
+    //aggregation läraren är ansvarig för kurser, men kurserna kan finnas utan läraren och kan tilldelas en annan lärare. 
+
     public List<Course> ResponsibleCourses { get; } = [];
 
     public Teacher(
@@ -22,23 +26,32 @@ public class Teacher : Person
         KnowledgeArea = knowledgeArea;
     }
 
-    public void AddCourse(Course course)
+    public bool AddCourse(Course course)
     {
-        foreach (Course existingCourse in ResponsibleCourses)
-        {
-            if (existingCourse.CourseNumber == course.CourseNumber)
-            {
-                Console.WriteLine("Course already exists!");
-            }
-            else
-            {
-                ResponsibleCourses.Add(course);
-                Console.WriteLine("Course added successfully");
-            }
-        }
+        return AddCourseTo(ResponsibleCourses, course);
     }
+
     public override string GetInfo()
     {
-        return base.GetInfo() + $", KnowledgeArea: {KnowledgeArea}, + ResponibleCourses: {ResponsibleCourses}";
+        string courses = "";
+        
+        if (ResponsibleCourses.Count== 0)
+        {
+            courses ="none";
+
+        }
+        else
+        {
+            foreach (Course course in ResponsibleCourses)
+            {
+                if (courses != "")
+                {
+                    courses += ", ";
+                }
+                courses += course.Title;
+            }
+        }
+        return base.GetInfo() + $", KnowledgeArea: {KnowledgeArea}, ResponsibleCourses: {courses}";
     }
 }
+
